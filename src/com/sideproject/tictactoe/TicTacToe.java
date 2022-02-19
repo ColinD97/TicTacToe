@@ -10,6 +10,8 @@ public class TicTacToe {
     private Map<String, String> gameValues;
     private int whoseTurn = 0;
     private String winningPlayer = "";
+    int playerOneGamesWon = 0;
+    int playerTwoGamesWon = 0;
 
     public TicTacToe() {
         this.userInput = new Scanner(System.in);
@@ -42,6 +44,7 @@ public class TicTacToe {
     // Loops runSingleGame() in a loop asking if they want to play again
     public void runGames(){
         boolean keepPlaying = true;
+
         while (keepPlaying) {
             runSingleGame();
             boolean validInput = false;
@@ -66,17 +69,30 @@ public class TicTacToe {
         while(!isGameOver) {
             whoseTurn++;
             printBoard(gameValues);
-            System.out.println(gameValues);
+            //System.out.println(gameValues);
             askPosition(gameValues);
             isGameOver = isWon();
-            System.out.println("whoseTurn: " + whoseTurn);
+            //System.out.println("whoseTurn: " + whoseTurn);
+            System.out.println();
             if (whoseTurn >8){
                 System.out.println("Tie Game");
                 isGameOver = true;
             }
         }
         printBoard(gameValues);
+        System.out.println();
         System.out.println("Player " +winningPlayer + " wins!");
+        System.out.println();
+        if (winningPlayer.equalsIgnoreCase("X")){
+            playerOneGamesWon++;
+        } else if (winningPlayer.equalsIgnoreCase("O")){
+            playerTwoGamesWon++;
+        }
+        System.out.println("Series score");
+        System.out.println("Player One: "+playerOneGamesWon);
+        System.out.println("Player Two: "+playerTwoGamesWon);
+        System.out.println();
+
     }
 
 
