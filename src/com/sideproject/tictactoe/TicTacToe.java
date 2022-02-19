@@ -12,6 +12,12 @@ public class TicTacToe {
     private String winningPlayer = "";
     int playerOneGamesWon = 0;
     int playerTwoGamesWon = 0;
+    private boolean isTie = false;
+    public static final String ANSI_RESET = "\u001B[30m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+
 
     public TicTacToe() {
         this.userInput = new Scanner(System.in);
@@ -20,7 +26,8 @@ public class TicTacToe {
 
     public static void main(String[] args) {
         TicTacToe gameObject = new TicTacToe();
-        System.out.println("Let's play Tic-Tac-Toe!");
+        System.out.println();
+        System.out.println(ANSI_CYAN + "Let's play Tic-Tac-Toe!" + ANSI_RESET);
         System.out.println();
         gameObject.runGames();
         gameObject.userInput.close();
@@ -75,19 +82,23 @@ public class TicTacToe {
             //System.out.println("whoseTurn: " + whoseTurn);
             System.out.println();
             if (whoseTurn >8){
-                System.out.println("Tie Game");
+                isTie = true;
                 isGameOver = true;
             }
         }
         printBoard(gameValues);
         System.out.println();
-        System.out.println("Player " +winningPlayer + " wins!");
-        System.out.println();
-        if (winningPlayer.equalsIgnoreCase("X")){
-            playerOneGamesWon++;
-        } else if (winningPlayer.equalsIgnoreCase("O")){
-            playerTwoGamesWon++;
+        if (!isTie){
+            System.out.println(ANSI_GREEN+"Player " +winningPlayer + " wins!"+ANSI_RESET);
+            if (winningPlayer.equalsIgnoreCase("X")){
+                playerOneGamesWon++;
+            } else if (winningPlayer.equalsIgnoreCase("O")){
+                playerTwoGamesWon++;
+            }
+        } else{
+        System.out.println(ANSI_RED + "Tie Game" + ANSI_RESET);
         }
+        System.out.println();
         System.out.println("Series score");
         System.out.println("Player One: "+playerOneGamesWon);
         System.out.println("Player Two: "+playerTwoGamesWon);
@@ -98,6 +109,7 @@ public class TicTacToe {
 
     // Prints board to screen, accepts current Map of values
     public void printBoard(Map<String,String> values){
+        System.out.print(ANSI_RESET);
         System.out.printf("    |   |   %n");
         System.out.printf("  %s | %s | %s %n", values.get("1"), values.get("2"), values.get("3"));
         System.out.printf("----+---+----%n");
@@ -105,6 +117,7 @@ public class TicTacToe {
         System.out.printf("----+---+----%n");
         System.out.printf("  %s | %s | %s %n", values.get("7"), values.get("8"), values.get("9"));
         System.out.printf("    |   |   %n");
+        System.out.print(ANSI_RESET);
     }
 
     // Initializes or resets game values.
@@ -118,12 +131,13 @@ public class TicTacToe {
         isGameOver = false;
         winningPlayer = "";
         whoseTurn = 0;
+        isTie = false;
         return gameValues;
     }
 
     // asks user what square they want to make their mark in
     public void askPosition(Map<String, String> values){
-        System.out.println("****************");
+        System.out.println("*************");
         boolean validEntry = false;
         while (!validEntry) {
             System.out.print("What square do you choose? (1-9): ");
