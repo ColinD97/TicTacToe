@@ -3,6 +3,7 @@ package com.sideproject.tictactoe;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Random;
 
 public class TicTacToe {
     private Scanner userInput;
@@ -13,6 +14,8 @@ public class TicTacToe {
     int playerOneGamesWon = 0;
     int playerTwoGamesWon = 0;
     private boolean isTie = false;
+    private Random random = new Random();
+    private int numOfPlayers = 2;
     public static final String ANSI_RESET = "\u001B[30m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RED = "\u001B[31m";
@@ -51,7 +54,20 @@ public class TicTacToe {
     // Loops runSingleGame() in a loop asking if they want to play again
     public void runGames(){
         boolean keepPlaying = true;
+        boolean keepAskingPlayerNumber = true;
 
+        while (keepAskingPlayerNumber){
+            try {
+                System.out.print("How many Human players? (0,1,2): ");
+                numOfPlayers = Integer.parseInt(userInput.nextLine());
+                if (numOfPlayers == 0 || numOfPlayers == 1 || numOfPlayers == 2) {
+                    keepAskingPlayerNumber = false;
+                } else {
+                System.out.println("That is not a valid input.");}
+            } catch (NumberFormatException e){
+                System.out.println("That is not a valid input.");
+            }
+        }
         while (keepPlaying) {
             runSingleGame();
             boolean validInput = false;
@@ -76,10 +92,20 @@ public class TicTacToe {
         while(!isGameOver) {
             whoseTurn++;
             printBoard(gameValues);
-            //System.out.println(gameValues);
-            askPosition(gameValues);
+            switch (numOfPlayers){
+                case 0:
+                    cpuTurn(gameValues);
+                    break;
+                case 1:
+                    if (whoseTurn % 2 != 0){
+                    askPosition(gameValues);}
+                    else {cpuTurn(gameValues);};
+                    break;
+                case 2:
+                    askPosition(gameValues);
+                    break;
+            }
             isGameOver = isWon();
-            //System.out.println("whoseTurn: " + whoseTurn);
             System.out.println();
             if (whoseTurn >8){
                 isTie = true;
@@ -149,12 +175,35 @@ public class TicTacToe {
                     } else {
                         values.put(userSquare, "X");
                     }
-
                     validEntry = true;
                 }
             }
         }
     }
+
+    public void cpuTurn(Map<String, String> values){
+        System.out.println("*************");
+        boolean validEntry = false;
+        while (!validEntry) {
+            int cpuChoiceInt = random.nextInt(10);
+            String cpuChoice = String.valueOf(cpuChoiceInt);
+            if (values.containsKey(cpuChoice)) {
+                if (!gameValues.get(cpuChoice).equalsIgnoreCase("X") && !gameValues.get(cpuChoice).equalsIgnoreCase("O")) {
+                    if (whoseTurn % 2 == 0) {
+                        values.put(cpuChoice, "O");
+                    } else {
+                        values.put(cpuChoice, "X");
+                    }
+                    System.out.print("Computer chose (1-9): " + cpuChoice);
+                    System.out.println();
+                    validEntry = true;
+                }
+            }
+
+        }
+    }
+
+
 
     // called to check rows, columns, and diagonals for matching values.
     // Returns boolean true if matching is found and sets winningPlayer field to match winner;
