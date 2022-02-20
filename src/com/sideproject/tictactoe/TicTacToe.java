@@ -20,6 +20,7 @@ public class TicTacToe {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
 
 
     public TicTacToe() {
@@ -28,10 +29,31 @@ public class TicTacToe {
     }
 
     public static void main(String[] args) {
+        String newLine = System.getProperty("line.separator");
         TicTacToe gameObject = new TicTacToe();
-        System.out.println();
-        System.out.println(ANSI_CYAN + "Let's play Tic-Tac-Toe!" + ANSI_RESET);
-        System.out.println();
+        System.out.println(ANSI_CYAN);
+
+//        System.out.println("+-+-+-+-+-+-+-+-+-+-+-+");
+//        System.out.println("|T|i|c|-|T|a|c|-|T|o|e|");
+//        System.out.println("+-+-+-+-+-+-+-+-+-+-+-+");
+//        System.out.println(
+//        String.join(newLine,
+//                "       _____   _                  _____                          _____",
+//                "      |_   _| (_)   ___          |_   _|   __ _    ___          |_   _|   ___     ___",
+//                "        | |   | |  / __|  _____    | |    / _` |  / __|  _____    | |    / _ \\   / _ \\",
+//                "        | |   | | | (__  |_____|   | |   | (_| | | (__  |_____|   | |   | (_) | |  __/",
+//                "        |_|   |_|  \\___|           |_|    \\__,_|  \\___|           |_|    \\___/   \\___|"
+//        ));
+//        //System.out.println(ANSI_CYAN + "Let's play Tic-Tac-Toe!" + ANSI_RESET);
+        System.out.println(String.join(newLine,
+
+                " ___    __     ___       __     ___  __   ___",
+                        "  |  | /  ` __  |   /\\  /  ` __  |  /  \\ |__",
+                "  |  | \\__,     |  /~~\\ \\__,     |  \\__/ |___"
+
+
+        ));
+        System.out.println(ANSI_RESET);
         gameObject.runGames();
         gameObject.userInput.close();
 
@@ -115,19 +137,24 @@ public class TicTacToe {
         printBoard(gameValues);
         System.out.println();
         if (!isTie){
-            System.out.println(ANSI_GREEN+"Player " +winningPlayer + " wins!"+ANSI_RESET);
+            //System.out.println(ANSI_GREEN+"Player " +winningPlayer + " wins!"+ANSI_RESET);
             if (winningPlayer.equalsIgnoreCase("X")){
+                System.out.println(ANSI_CYAN+"Player X wins!"+ANSI_RESET);
                 playerOneGamesWon++;
             } else if (winningPlayer.equalsIgnoreCase("O")){
+                System.out.println(ANSI_RED+"Player O wins!"+ANSI_RESET);
                 playerTwoGamesWon++;
             }
         } else{
-        System.out.println(ANSI_RED + "Tie Game" + ANSI_RESET);
+        System.out.println(ANSI_RESET + "Tie Game" + ANSI_RESET);
         }
         System.out.println();
-        System.out.println("Series score");
-        System.out.println("Player One: "+playerOneGamesWon);
-        System.out.println("Player Two: "+playerTwoGamesWon);
+        System.out.println(" ---------------");
+        System.out.println("| Series score  |");
+        System.out.println("| Player One: "+playerOneGamesWon+ " |");
+        System.out.println("| Player Two: "+playerTwoGamesWon+ " |");
+        System.out.println(" ---------------");
+
         System.out.println();
 
     }
@@ -136,14 +163,34 @@ public class TicTacToe {
     // Prints board to screen, accepts current Map of values
     public void printBoard(Map<String,String> values){
         System.out.print(ANSI_RESET);
+//        System.out.printf("    |   |   %n");
+//        System.out.printf("  %s | %s | %s %n", values.get("1"), values.get("2"), values.get("3"));
+//        System.out.printf("----+---+----%n");
+//        System.out.printf("  %s | %s | %s %n", values.get("4"), values.get("5"), values.get("6"));
+//        System.out.printf("----+---+----%n");
+//        System.out.printf("  %s | %s | %s %n", values.get("7"), values.get("8"), values.get("9"));
+//        System.out.printf("    |   |   %n");
+
         System.out.printf("    |   |   %n");
-        System.out.printf("  %s | %s | %s %n", values.get("1"), values.get("2"), values.get("3"));
+        System.out.println("  "+boardValue(values.get("1"))+" | "+boardValue(values.get("2"))+" | "+boardValue(values.get("3")));
         System.out.printf("----+---+----%n");
-        System.out.printf("  %s | %s | %s %n", values.get("4"), values.get("5"), values.get("6"));
+        System.out.println("  "+boardValue(values.get("4"))+" | "+boardValue(values.get("5"))+" | "+boardValue(values.get("6")));
         System.out.printf("----+---+----%n");
-        System.out.printf("  %s | %s | %s %n", values.get("7"), values.get("8"), values.get("9"));
+        System.out.println("  "+boardValue(values.get("7"))+" | "+boardValue(values.get("8"))+" | "+boardValue(values.get("9")));
         System.out.printf("    |   |   %n");
         System.out.print(ANSI_RESET);
+    }
+
+    // sub method to determine color of symbol to be printed on board
+    public String boardValue(String boardSymbol){
+        String coloredSymbol = "";
+        if (boardSymbol.equalsIgnoreCase("X")){
+            return ANSI_CYAN + "X" + ANSI_RESET;
+        } else if (boardSymbol.equalsIgnoreCase("O")){
+            return ANSI_RED + "O" + ANSI_RESET;
+        } else if (!boardSymbol.equalsIgnoreCase("X") || !boardSymbol.equalsIgnoreCase("O")) {
+            return ANSI_YELLOW + boardSymbol + ANSI_RESET;
+        } return "error";
     }
 
     // Initializes or resets game values.
